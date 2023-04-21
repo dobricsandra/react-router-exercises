@@ -3,12 +3,15 @@ import * as ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import routes from "./routes/routes";
 import { Provider } from "react-redux";
-import { store } from "../src/store/store";
+import { store, persistor } from "../src/store/store";
+import { PersistGate } from "redux-persist/integration/react";
 
 const router = createBrowserRouter(routes);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <Provider store={store}>
-    <RouterProvider router={router} />
+    <PersistGate loading={null} persistor={persistor}>
+      <RouterProvider router={router} />
+    </PersistGate>
   </Provider>
 );

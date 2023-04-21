@@ -8,6 +8,7 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
 
   const handleUsernameChange = (event) => {
     setUsername(event.target.value);
@@ -19,11 +20,16 @@ const LoginPage = () => {
 
   const handleSubmit = () => {
     console.log("Login button clicked");
-    LOGIN().then((res) => {
-      console.log("LOGIN RES TOKEN >", res);
-      dispatch({ type: "login", payload: res });
-      navigate("/admin");
-    });
+    setErrorMsg("");
+    LOGIN()
+      .then((res) => {
+        dispatch({ type: "login", payload: res });
+        navigate("/admin");
+      })
+      .catch((e) => {
+        console.log("Error > ", e.response.data.message);
+        setErrorMsg(e.response.data.message);
+      });
   };
 
   return (
@@ -38,6 +44,7 @@ const LoginPage = () => {
       <button type="submit" onClick={handleSubmit}>
         Login
       </button>
+      {errorMsg && <div style={{ color: "red" }}>{errorMsg}</div>}
     </div>
   );
 };

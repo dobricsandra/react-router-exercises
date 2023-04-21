@@ -1,25 +1,24 @@
-// import { Navigate } from "react-router";
+import { useSelector } from "react-redux";
+import { Navigate } from "react-router-dom";
 
 const RouteGuard = ({ children }) => {
-  // saznati je li user ulogiran, ako nije, redirectati ga na login page
-  // const isUserLoggedIn = LOGIN();
-  // console.log("current page: ", children.type.name);
-  // let redirectPathname = "/";
-  // if (children.type.name === "AdminHomepage") {
-  //   redirectPathname = "/login";
-  // }
+  const currentToken = useSelector((state) => state?.token);
+  let redirectPathName = "";
 
-  // ako je user ulogiran,
-  // return children; inace, return pathname
+  console.log("Token > ", currentToken, ", Page > ", children.type.name);
 
-  // return (
-  //   <Navigate
-  //     to={{
-  //       pathname: redirectPathname,
-  //     }}
-  //   />
-  // );
-  return children;
+  if (currentToken && children.type.name === "LoginPage") {
+    console.log("ulogiran je i zeli na login page, vratimo ga na admin");
+    redirectPathName = "/admin";
+  } else if (currentToken === "") {
+    console.log("nije ulogiran i zeli bilo gdje, vratimo ga na login");
+    redirectPathName = "/login";
+  } else {
+    console.log("sve u redu");
+    return children;
+  }
+
+  return <Navigate to={{ pathname: redirectPathName }}></Navigate>;
 };
 
 export default RouteGuard;

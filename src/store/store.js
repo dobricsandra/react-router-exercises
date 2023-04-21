@@ -1,10 +1,17 @@
 import { createStore } from "redux";
+import { persistStore, persistReducer } from "redux-persist";
+import storage from "redux-persist/lib/storage";
+
+const persistConfig = {
+  key: "root",
+  storage,
+};
 
 const loginReducer = (state = { token: "" }, action = { payload: "" }) => {
   let tokenValue = action.payload;
   if (action.type === "login") {
     return {
-      token: tokenValue, // tu treba staviti vrijednost tokena
+      token: tokenValue,
     };
   }
 
@@ -17,4 +24,6 @@ const loginReducer = (state = { token: "" }, action = { payload: "" }) => {
   return state;
 };
 
-export const store = createStore(loginReducer);
+const persistedReducer = persistReducer(persistConfig, loginReducer);
+export const store = createStore(persistedReducer);
+export const persistor = persistStore(store);
