@@ -5,16 +5,16 @@ const RouteGuard = ({ children }) => {
   const currentToken = useSelector((state) => state?.token);
   let redirectPathName = "";
 
-  console.log("Token > ", currentToken, ", Page > ", children.type.name);
-
+  // user je logiran i zeli na login page, vratimo ga na admin page
   if (currentToken && children.type.name === "LoginPage") {
-    console.log("ulogiran je i zeli na login page, vratimo ga na admin");
     redirectPathName = "/admin";
-  } else if (currentToken === "") {
-    console.log("nije ulogiran i zeli bilo gdje, vratimo ga na login");
+
+    // user nije ulogiran i nije vec na login page-u, vratimo ga na login page
+  } else if (currentToken === "" && children.type.name !== "LoginPage") {
     redirectPathName = "/login";
+
+    // inace ga redirectamo na stranicu na koju zeli ici
   } else {
-    console.log("sve u redu");
     return children;
   }
 
